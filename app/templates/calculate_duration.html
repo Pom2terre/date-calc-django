@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Calculate Duration</title>
+    <title>📆 Calculate Duration – v{{ app_version }}</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -93,7 +93,31 @@
   </head>
 
   <body>
-    <h1>Calculate Duration</h1>
+    {% if environment == "production" %}
+        <div style="
+            background-color: #dff0d8;
+            color: #3c763d;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        ">
+            🟢 Mode production
+        </div>
+    {% else %}
+        <div style="
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        ">
+            🟡 Mode développement (DEBUG actif)
+        </div>
+    {% endif %}
+
+    <h1>📆 Calculate Duration</h1>
 
     {% if calculation_done %}
       <div id="success-message" style="
@@ -165,7 +189,7 @@
             font-size: 16px;
             cursor: pointer;
           ">
-            ← Retourner
+            ← Retour
           </button>
         </form>
       </div>
@@ -182,11 +206,29 @@
             }, 3000);
           }
         });
-      </script>
+
+        // Disparition automatique du bandeau production
+        window.addEventListener("DOMContentLoaded", () => {
+            const banner = document.getElementById("env-banner");
+            if (banner) {
+            setTimeout(() => {
+                banner.style.opacity = "0";
+                setTimeout(() => banner.style.display = "none", 1000);
+            }, 4000); // 4 secondes d'affichage
+            }
+        });
+    </script>
 
     <p style="text-align: center; font-size: 12px; color: #888;">
         Environnement actif : {{ environment }}
+    </p>    
+    <p style="text-align: center; font-size: 12px; color: #999;">
+        DEBUG : {{ debug }}
     </p>
-  </body>
+
+    <p style="text-align: center; font-size: 11px; color: #aaa;">
+        Version de l'application : {{ app_version }}
+    </p>
+</body>
 </html>
 

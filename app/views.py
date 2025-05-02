@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import DurationForm
 from datetime import datetime
+import os
+from django.conf import settings
 
 def home(request):
     return redirect('calculate-duration')
@@ -26,11 +28,21 @@ def calculate_duration(request):
                 'time_duration_weeks': round(days / 7, 2),
                 'time_duration_percentage': round(days / 365 * 100, 2),
                 'current_year': end_date.year,
+                'calculation_done': True,
             })
-            context['calculation_done'] = True
         else:
             context['form'] = form
     else:
         form = DurationForm()
         context['form'] = form
+
+    # ✅ Toujours définir ces deux variables
+    context['environment'] = os.getenv("DJANGO_ENV", "dev")
+    context['debug'] = settings.DEBUG
+
+    # ✅ Version de l'application
+    # Assurez-vous que APP_VERSION est défini dans vos settings.py
+    context['app_version'] = settings.APP_VERSION
+
+
     return render(request, 'calculate_duration.html', context)

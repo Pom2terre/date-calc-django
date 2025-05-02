@@ -1,4 +1,5 @@
 from pathlib import Path
+from app.version import APP_VERSION
 import os
 
 DJANGO_ENV = os.getenv("DJANGO_ENV", "dev")
@@ -121,6 +122,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 CSRF_TRUSTED_ORIGINS = [
     'https://my-python-app123.azurewebsites.net',
 ]
-
+# Ensure you have the correct settings for your environment
 # Redeploy triggered manually
 # This is a placeholder for any manual redeploy logic you might want to add.
