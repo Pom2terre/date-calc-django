@@ -1,0 +1,159 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Calculate Duration</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        text-align: center;
+        color: #4caf50;
+        margin-top: 20px;
+      }
+
+      form {
+        max-width: 500px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      .result-block {
+        max-width: 500px;
+        margin: 20px auto;
+        font-size: 16px;
+        color: #333;
+        padding: 15px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: left;
+      }
+
+      ul {
+        max-width: 500px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        list-style-type: none;
+      }
+
+      ul li {
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      .errorlist {
+        color: red;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Calculate Duration</h1>
+
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Calculate</button>
+    </form>
+
+    {% if form.errors %}
+      <div style="color: red; text-align: center;">
+        Please correct the errors above.
+      </div>
+    {% endif %}
+
+    {% if time_duration_days is not None %}
+      <h2 style="text-align: center;">Results:</h2>
+      <p style="text-align: center;">From (and including start date): {{ start_date }}</p>
+      <p style="text-align: center;">To (but not including end date): {{ end_date }}</p>
+
+      <div class="result-block">
+        <strong>
+          Result: <span style="color: red">{{ time_duration_days }}</span> days,
+          or
+          <span style="color: rgb(42, 139, 143)">
+            {{ time_duration_months }}
+          </span>
+          months,
+          <span style="color: rgb(42, 139, 143)">
+            {{ time_duration_remaining_days_in_month }}
+          </span>
+          days excluding the end date.
+        </strong>
+      </div>
+
+      <h3 style="text-align: center;">Alternative time units:</h3>
+      <ul>
+        <li>{{ time_duration_seconds|intcomma }} seconds</li>
+        <li>{{ time_duration_minutes|intcomma }} minutes</li>
+        <li>{{ time_duration_hours|intcomma }} hours</li>
+        <li>{{ time_duration_days|intcomma }} days</li>
+        <li>{{ time_duration_weeks|intcomma }} weeks</li>
+        <li>
+          Percentage of the year: {{ time_duration_percentage }}% of {{ current_year }}
+        </li>
+      </ul>
+      <div style="text-align: center; margin-top: 20px;">
+        <form method="get" action="{% url 'calculate-duration' %}">
+          <button type="submit" style="
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+          ">
+            ← Retourner
+          </button>
+        </form>
+      </div>
+    {% endif %}
+  </body>
+</html>
+
