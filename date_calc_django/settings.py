@@ -1,6 +1,8 @@
 from pathlib import Path
 import os
 
+DJANGO_ENV = os.getenv("DJANGO_ENV", "dev")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,9 +13,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'your-secret-key'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'my-python-app123.azurewebsites.net']
+if DJANGO_ENV == "production":
+    ALLOWED_HOSTS = ['my-python-app123.azurewebsites.net']
+    CSRF_TRUSTED_ORIGINS = ['https://my-python-app123.azurewebsites.net']
+else:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    # Pas besoin de CSRF_TRUSTED_ORIGINS en local
 
 # Application definition
 INSTALLED_APPS = [
@@ -115,3 +122,5 @@ CSRF_TRUSTED_ORIGINS = [
     'https://my-python-app123.azurewebsites.net',
 ]
 
+# Redeploy triggered manually
+# This is a placeholder for any manual redeploy logic you might want to add.
