@@ -137,8 +137,15 @@
 
     <form method="POST">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Calculate</button>
+        <p>{{ form.start_date.label_tag }} {{ form.start_date }}</p>
+        <p>{{ form.end_date.label_tag }} {{ form.end_date }}</p>
+        <p style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+            <input type="checkbox" name="include_today" id="include_today" {% if form.include_today.value %}checked{% endif %}>
+            <label for="include_today" style="margin: 0; font-weight: normal;">
+              Inclure la date du jour
+            </label>
+        </p>
+        <button type="submit">Calculate</button>
     </form>
 
     {% if form.errors %}
@@ -150,7 +157,9 @@
     {% if time_duration_days is not None %}
       <h2 style="text-align: center;">Results:</h2>
       <p style="text-align: center;">From (and including start date): {{ start_date }}</p>
-      <p style="text-align: center;">To (but not including end date): {{ end_date }}</p>
+      <p style="text-align: center;">
+        To {% if include_today %}(including end date){% else %}(but not including end date){% endif %} : {{ end_date }}
+      </p>
 
       <div class="result-block">
         <strong>

@@ -4,6 +4,7 @@ from datetime import datetime
 class DurationForm(forms.Form):
     start_date = forms.CharField(label="Start Date (dd/mm/yy)", required=True)
     end_date = forms.CharField(label="End Date (dd/mm/yy, optional)", required=False)
+    include_today = forms.BooleanField(label='Inclure la date du jour', required=False)
 
     def clean_start_date(self):
         data = self.cleaned_data['start_date']

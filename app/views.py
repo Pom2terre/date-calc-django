@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import DurationForm
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from django.conf import settings
 
@@ -13,8 +13,18 @@ def calculate_duration(request):
         form = DurationForm(request.POST)
         if form.is_valid():
             start_date = form.cleaned_data['start_date']
+            include_today = form.cleaned_data.get('include_today', False)
             end_date = form.cleaned_data['end_date'] or datetime.today().date()
-            delta = end_date - start_date
+            # ➕ Si on inclut la date du jour, on ajoute 1 jour
+            if include_today:
+                delta = end_date - start_date + timedelta(days=1)
+            else:
+                delta = end_date - start_date
+            # ➕ Si la date de fin est inférieure à la date de début, on inverse les dates
+            if delta.days < 0:
+                start_date, end_date = end_date, start_date
+                delta = end_date - start_date
+            # ➕ On calcule la durée en jours
             days = delta.days
             context.update({
                 'start_date': start_date.strftime('%d/%m/%y'),
@@ -29,6 +39,7 @@ def calculate_duration(request):
                 'time_duration_percentage': round(days / 365 * 100, 2),
                 'current_year': end_date.year,
                 'calculation_done': True,
+                'include_today': include_today,
             })
         else:
             context['form'] = form
