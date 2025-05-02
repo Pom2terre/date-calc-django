@@ -27,6 +27,7 @@ def calculate_duration(request):
                 'time_duration_percentage': round(days / 365 * 100, 2),
                 'current_year': end_date.year,
             })
+            context['calculation_done'] = True
         else:
             context['form'] = form
     else:

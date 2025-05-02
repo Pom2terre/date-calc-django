@@ -13,10 +13,7 @@ SECRET_KEY = 'your-secret-key'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-if os.getenv("DJANGO_ENV") == "production":
-    ALLOWED_HOSTS = ['my-python-app123.azurewebsites.net']
-else:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'my-python-app123.azurewebsites.net']
 
 # Application definition
 INSTALLED_APPS = [
@@ -113,4 +110,8 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://my-python-app123.azurewebsites.net',
+]
 
